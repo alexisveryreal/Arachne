@@ -1,7 +1,7 @@
 <br><br>
 
 <p align="center">
-<a href="https://github.com/alexisveryreal"><img width="140" src="./src/arachne.jpg" alt="arach"></a>
+<a href="https://github.com/alexisveryreal"><img width="fit" src="./src/arachne.jpg" alt="arach"></a>
 <br>
 
 </p>
