@@ -3,6 +3,7 @@ package com.example.arachne;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,18 @@ public class MainActivity extends AppCompatActivity {
                 int num1 = Integer.parseInt(firstNumEditText.getText().toString());
                 int num2 = Integer.parseInt(secondNumEditText.getText().toString());
                 int result = num1 + num2;
+
                 resultTextView.setText(format("%d", result));
+
+                Button secondActivityBtn = (Button) findViewById(R.id.nextBtn);
+                secondActivityBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent startIntent = new Intent(getApplicationContext(), SecondActivity.class);
+                        // show how to pass information to another activity
+                        startActivity(startIntent);
+                    }
+                });
 
             }
         });
