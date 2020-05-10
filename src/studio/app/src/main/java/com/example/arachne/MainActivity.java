@@ -18,6 +18,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button secondActivityBtn = (Button) findViewById(R.id.nextBtn);
+        secondActivityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), SecondActivity.class);
+                // show how to pass information to another activity
+                startActivity(startIntent);
+            }
+        });
+
 
         Button addBtn = (Button) findViewById(R.id.addBtn);
         addBtn.setOnClickListener(new View.OnClickListener(){
@@ -34,16 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
                 resultTextView.setText(format("%d", result));
 
-                Button secondActivityBtn = (Button) findViewById(R.id.nextBtn);
-                secondActivityBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent startIntent = new Intent(getApplicationContext(), SecondActivity.class);
-                        // show how to pass information to another activity
-                        startActivity(startIntent);
-                    }
-                });
-
+                
             }
         });
     }
