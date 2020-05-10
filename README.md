@@ -9,7 +9,7 @@
 <br><br>
 
 # Arachne
-Working in progress, Wizard 101 Damage Calculator
+Work in progress, Wizard 101 Damage Calculator
 
 ### Prerequisites
 
