@@ -9,7 +9,7 @@
 <br><br>
 
 # Arachne
-Wizard 101 Damage Calculator
+Working in progress, Wizard 101 Damage Calculator
 
 ### Prerequisites
 
