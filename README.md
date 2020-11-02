@@ -21,7 +21,7 @@ The source code of Arachne can be found [here](./src/).
 
 ## Build with
 
-[Android Studio](https://developer.android.com/studio/) - Development Program
+C++11
 
 ## Authors
 
