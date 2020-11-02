@@ -16,6 +16,6 @@ deMain: $(OBJS)
 deMain.o: deMain.cpp $(DEPS)
 	$(CC) -Wall -g -c deMain.cpp
 
-
+# clean
 clean:
 	rm $(OBJS)

@@ -39,11 +39,15 @@ int main(int argc, char*argv[]){
 
     std::string spellVal = "";
     int spellDamage = 0;
+    double damageOutput = 0.0;
     while(true){
         std::cout << "Enter a spell damage value or 'q' to quit: ";
         if(std::cin >> spellVal && spellVal != "q") {
             spellDamage = stoi(spellVal);
-            std::cout << "Spell damage: " << spellDamage << std::endl;
+            //std::cout << "Spell damage: " << spellDamage << std::endl;
+            damageOutput = myTest.calculateDamge(spellDamage);
+            std::cout << "Damage output: " << damageOutput << std::endl;
+            
         } else {
             break;
         }

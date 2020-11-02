@@ -8,10 +8,12 @@ public:
     void newWiz(std::string, int, int);
     bool getArgs(int, char*[], std::string&);
     bool readText(const std::string);
+    double calculateDamge(int);
     void printWiz();
+     
 private:
     std::string wizName;
-    int wizPercentage;
+    double wizPercentage;
     int wizFlat;
 };
 

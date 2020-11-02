@@ -2,6 +2,8 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <iomanip>
+#include <math.h>
 #include "test.h"
 
 /*---------------------------------------
@@ -12,7 +14,7 @@ POSTCONDITION(S): initializes everything to 0
 test::test(){
     wizName = "";
     wizFlat = 0;
-    wizPercentage = 0;
+    wizPercentage = 0.0;
 }
 
 /*---------------------------------------
@@ -22,8 +24,11 @@ RETURN TYPE: void
 POSTCONDITION(S): creates a new wizard
 ---------------------------------------*/
 void test::newWiz(std::string wizardName, int damagePercent, int damageFlat){
+
+    //std::setprecision(2);
     wizName = wizardName;
-    wizPercentage = damagePercent;
+    wizPercentage = (double) damagePercent / 100;
+    //std::cout << std::setprecision(2) << std::fixed << wizPercentage << std::endl;
     wizFlat = damageFlat;
 }
 
@@ -125,6 +130,28 @@ bool test::readText(const std::string inputFile){
 
 }
 /*---------------------------------------------------------------
+FUNCTION NAME: calculateDamage
+PARAMETER(S): int
+RETURN TYPE: int
+POSTCONDITION(S): calculates the total damage output from the spell
+---------------------------------------------------------------*/
+double test::calculateDamge(int spellDamage){
+    double totalDamage = 0;
+
+    //Multiply by percentage
+    totalDamage = (double) spellDamage;
+
+    // damage is additive so its damage + (damage x %school)
+    totalDamage += spellDamage * wizPercentage;
+    totalDamage = floor(totalDamage);
+
+    //add flat Damage
+    totalDamage += wizFlat;
+
+    return totalDamage;
+}
+
+/*---------------------------------------------------------------
 FUNCTION NAME: printWiz
 PARAMETER(S): 
 RETURN TYPE: void
@@ -132,11 +159,14 @@ POSTCONDITION(S): if it exists, prints out the current wizard
 ---------------------------------------------------------------*/
 void test::printWiz(){
     
+    double actualPercentage = 0.0;
+
     std::cout << " Wizard Name: ";
     std::cout << wizName << std::endl;
 
     std::cout << " --> Damage Percentage: ";
-    std::cout << wizPercentage << std::endl;
+    actualPercentage = wizPercentage * 100;
+    std::cout << actualPercentage << "%" << std::endl;
     
     std::cout << " --> Damage Flat: ";
     std::cout << wizFlat << std::endl;
