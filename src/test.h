@@ -10,7 +10,8 @@ public:
     bool readText(const std::string);
     double calculateDamge(int);
     void printWiz();
-     
+    bool checkNumber(std::string);
+    
 private:
     std::string wizName;
     double wizPercentage;

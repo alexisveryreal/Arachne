@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
+#include <limits>
 
 #include "test.h"
 
@@ -43,11 +44,16 @@ int main(int argc, char*argv[]){
     while(true){
         std::cout << "Enter a spell damage value or 'q' to quit: ";
         if(std::cin >> spellVal && spellVal != "q") {
+            if(!myTest.checkNumber(spellVal)){
+                std::cout << "\t Error! Please only enter integers for spell values" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
             spellDamage = stoi(spellVal);
             //std::cout << "Spell damage: " << spellDamage << std::endl;
             damageOutput = myTest.calculateDamge(spellDamage);
             std::cout << "Damage output: " << damageOutput << std::endl;
-            
         } else {
             break;
         }

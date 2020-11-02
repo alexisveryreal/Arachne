@@ -173,3 +173,15 @@ void test::printWiz(){
 
     std::cout << std::endl;
 }
+/*---------------------------------------------------------------
+FUNCTION NAME: checkNumber
+PARAMETER(S): string
+RETURN TYPE: bool
+POSTCONDITION(S): checks to make sure the string read in is a int
+---------------------------------------------------------------*/
+bool test::checkNumber(std::string str){
+    for (size_t i = 0; i < str.length(); i++)
+    if (isdigit(str[i]) == false)
+        return false;
+    return true;
+}
