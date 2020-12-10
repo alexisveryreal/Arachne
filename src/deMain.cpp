@@ -41,9 +41,20 @@ int main(int argc, char*argv[]){
     std::string spellVal = "";
     int spellDamage = 0;
     double damageOutput = 0.0;
+    //bool isBlade = false;
+    bool isTrap = false;
+
     while(true){
-        std::cout << "Enter a spell damage value or 'q' to quit: ";
-        if(std::cin >> spellVal && spellVal != "q") {
+        std::cout << "Enter a spell damage value (t# for traps/shields) OR 'q' to quit: ";
+        if(std::cin >> spellVal && spellVal != "q" ) {
+            if(spellVal[0] == 't'){
+                //its a trap value
+                isTrap = true;
+
+                // erase the "t"
+                spellVal.erase(0, 1);
+            } 
+            // check to make sure the rest of the string is purely digits
             if(!myTest.checkNumber(spellVal)){
                 std::cout << "\t Error! Please only enter integers for spell values" << std::endl;
                 std::cin.clear();
@@ -51,9 +62,19 @@ int main(int argc, char*argv[]){
                 continue;
             }
             spellDamage = stoi(spellVal);
-            //std::cout << "Spell damage: " << spellDamage << std::endl;
-            damageOutput = myTest.calculateDamge(spellDamage);
-            std::cout << "Damage output: " << damageOutput << std::endl;
+            if(isTrap){
+                myTest.addTrap(spellDamage);
+                // reset the boolean for next input
+                isTrap = false;
+                std::cout << std::endl;
+            } else {
+                //std::cout << "Spell damage: " << spellDamage << std::endl;
+                damageOutput = myTest.calculateDamge(spellDamage);
+                std::cout << bars << std::endl;
+                std::cout <<  bold << "Damage output: " << damageOutput << unbold << std::endl << std::endl;
+
+            }
+            
         } else {
             break;
         }

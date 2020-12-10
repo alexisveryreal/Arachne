@@ -16,6 +16,7 @@ test::test(){
     wizName = "";
     wizFlat = 0;
     wizPercentage = 0.0;
+    trapAdded = false;
 }
 
 /*---------------------------------------
@@ -148,20 +149,56 @@ double test::calculateDamge(int spellDamage){
     //add flat Damage
     totalDamage += wizFlat;
 
+    // if there were traps added, add to the calculation
+    if(trapAdded){
+        double trap;
+        double printPer;
+        std::cout << "\n";
+        // make a dummy stack to copy the contents of the current stack to pop
+        for(std::stack<double> dump = st; !dump.empty(); dump.pop()){
+            trap = dump.top();
+            if(trap > 0){
+                std::cout << "^-^ Trap   +";
+            } else {
+                std::cout << ":-; Shield ";
+            }
+            printPer = trap * 100;
+            std::cout << printPer << "%" << "\n";
+
+             // EX: D = 120 + (120 x 25%)
+            totalDamage += totalDamage * (double)trap;
+            totalDamage = floor(totalDamage);
+            //std::cout << totalDamage << "\n";
+        }
+         
+    }
+
     return totalDamage;
 }
 /*---------------------------------------------------------------
-FUNCTION NAME: addBlade
-PARAMETER(S): percentage that blade takes in, or decreases
+FUNCTION NAME: addTrap
+PARAMETER(S): percentage that Trap takes in, or 
+the shield decreases
 RETURN TYPE: void
-POSTCONDITION(S): prints out stack of blades on your wizard. 
+POSTCONDITION(S): Pushes the trap into a stack (LIFO)
+Prints out the trap that was just added. 
 ---------------------------------------------------------------*/
-void test::addBlade(int addOrSub){
+void test::addTrap(int addOrSub){
+
+    double trapDec = (double) addOrSub / 100;
     
     // adds the value on top of the stack
-    st.push(addOrSub);
+    st.push(trapDec);
+
+    if(addOrSub > 0){
+        std::cout << "\tThe trap   +"; 
+    } else {
+         std::cout << "\tThe shield ";
+    }
     
 
+    std::cout << addOrSub << "% was added" << "\n";
+    trapAdded = true;
 
 }
 /*---------------------------------------------------------------
@@ -195,8 +232,13 @@ POSTCONDITION(S): checks to make sure the string read in is a int
 ---------------------------------------------------------------*/
 bool test::checkNumber(std::string str){
     for (size_t i = 0; i < str.length(); i++)
-    if (isdigit(str[i]) == false)
+    if (isdigit(str[i]) == false){
+        // if it's a negative we check the rest
+        if(str[0] == '-'){
+            continue;
+        }
         return false;
+    }
     return true;
 }
 
