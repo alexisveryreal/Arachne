@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <stack>
 #include <math.h>
 #include "test.h"
 
@@ -126,9 +127,8 @@ bool test::readText(const std::string inputFile){
         inFile.close();
     }
     return true; 
-
-
 }
+
 /*---------------------------------------------------------------
 FUNCTION NAME: calculateDamage
 PARAMETER(S): int
@@ -150,7 +150,20 @@ double test::calculateDamge(int spellDamage){
 
     return totalDamage;
 }
+/*---------------------------------------------------------------
+FUNCTION NAME: addBlade
+PARAMETER(S): percentage that blade takes in, or decreases
+RETURN TYPE: void
+POSTCONDITION(S): prints out stack of blades on your wizard. 
+---------------------------------------------------------------*/
+void test::addBlade(int addOrSub){
+    
+    // adds the value on top of the stack
+    st.push(addOrSub);
+    
 
+
+}
 /*---------------------------------------------------------------
 FUNCTION NAME: printWiz
 PARAMETER(S): 
@@ -173,6 +186,7 @@ void test::printWiz(){
 
     std::cout << std::endl;
 }
+
 /*---------------------------------------------------------------
 FUNCTION NAME: checkNumber
 PARAMETER(S): string
@@ -185,3 +199,15 @@ bool test::checkNumber(std::string str){
         return false;
     return true;
 }
+
+
+
+
+
+// empty function desc for future
+/*---------------------------------------------------------------
+FUNCTION NAME: 
+PARAMETER(S): 
+RETURN TYPE: 
+POSTCONDITION(S): 
+---------------------------------------------------------------*/
