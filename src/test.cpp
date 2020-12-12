@@ -16,9 +16,10 @@ test::test(){
     wizName = "";
     wizFlat = 0;
     wizPercentage = 0.0;
+    toPeeveOrNotToPeeve = false;
     trapAdded = false;
+    bladeAdded = false;
 }
-
 /*---------------------------------------
 FUNCTION NAME: newWiz
 PARAMETER(S): int, int
@@ -144,10 +145,12 @@ bool test::readText(const std::string inputFile){
 
 /*---------------------------------------------------------------
 FUNCTION NAME: calculateDamage
-PARAMETER(S): int
+PARAMETER(S): int, bool
 RETURN TYPE: int
 POSTCONDITION(S): calculates the total damage output from the spell.
-
+if showCrit = true, will return the critical damage output, based
+on if the user is in PVP or PVE, from what user entered in their
+text file. 
 ---------------------------------------------------------------*/
 double test::calculateDamge(int spellDamage, bool showCrit){
     double totalDamage = 0.0;
@@ -155,8 +158,6 @@ double test::calculateDamge(int spellDamage, bool showCrit){
 
     //Multiply by percentage
     totalDamage = (double) spellDamage;
-
-
 
     if(showCrit){
         // if we crit then we do 2x damage in pve and 1.33 in pvp
@@ -176,6 +177,27 @@ double test::calculateDamge(int spellDamage, bool showCrit){
     }
     
     totalDamage = floor(totalDamage);
+
+    if(bladeAdded){
+        double blade;
+        double printPercentage;
+        std::cout << "\n";
+
+        for(std::queue<double> printQ = qu; !printQ.empty(); printQ.pop()){
+            blade = printQ.front();
+            if(blade > 0){
+                std::cout << "Q^Q Blade +";
+            } else {
+                std::cout << "Q.Q Blade ";
+            }
+            printPercentage = blade * 100;
+            std::cout << printPercentage << "%\n";
+
+            totalDamage += totalDamage * (double)blade;
+            totalDamage = floor(totalDamage);
+        }
+
+    }
 
     //add flat Damage
     totalDamage += wizFlat;
@@ -204,11 +226,13 @@ double test::calculateDamge(int spellDamage, bool showCrit){
          
     }
 
+    
+
     return totalDamage;
 }
 /*---------------------------------------------------------------
 FUNCTION NAME: addTrap
-PARAMETER(S): percentage that Trap takes in, or 
+PARAMETER(S): int - percentage that Trap takes in, or 
 the shield decreases
 RETURN TYPE: void
 POSTCONDITION(S): Pushes the trap into a stack (LIFO)
@@ -231,6 +255,28 @@ void test::addTrap(int addOrSub){
     std::cout << addOrSub << "% was added" << "\n";
     trapAdded = true;
 
+}
+/*---------------------------------------------------------------
+FUNCTION NAME: addBlade
+PARAMETER(S): int (pos/neg)
+RETURN TYPE: void
+POSTCONDITION(S): pushes blade onto a queue (FIFO), prints out
+the blade that was just added.  
+---------------------------------------------------------------*/
+void test::addBlade(int myBlade){
+    double bladeDecimal = (double) myBlade /100;
+
+    qu.push(bladeDecimal);
+
+    std::cout << "\tThe blade ";
+    if(myBlade > 0){
+        std::cout << " +";
+    } else {
+        std::cout << " ";
+    }
+
+    std::cout << myBlade << "% was added" << "\n";
+    bladeAdded = true;
 }
 /*---------------------------------------------------------------
 FUNCTION NAME: printWiz

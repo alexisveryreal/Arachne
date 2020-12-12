@@ -43,17 +43,29 @@ int main(int argc, char*argv[]){
     double damageOutput = 0.0;
     //bool isBlade = false;
     bool isTrap = false;
+    bool isBlade = false;
 
     while(true){
-        std::cout << "Enter a spell damage value (t# for traps/shields) OR 'q' to quit: ";
-        if(std::cin >> spellVal && spellVal != "q" ) {
-            if(spellVal[0] == 't'){
-                //its a trap value
-                isTrap = true;
+        std::cout << "Enter a spell damage value, (t# for traps/shields), (b# for blades) OR 'q' to quit: ";
+        if(std::cin>> spellVal && spellVal != "q"){
+            switch(spellVal[0]){
+                case 't':
+                    //its a trap value
+                    isTrap = true;
 
-                // erase the "t"
-                spellVal.erase(0, 1);
-            } 
+                    // erase the "t"
+                    spellVal.erase(0, 1);
+                    break;
+                case 'b':
+                    // its a blade value
+                    isBlade = true;
+
+                    // erase the "b"
+                    spellVal.erase(0, 1);
+                    break;
+                default:
+                    break;
+            }
             // check to make sure the rest of the string is purely digits
             if(!myTest.checkNumber(spellVal)){
                 std::cout << "\t Error! Please only enter integers for spell values" << std::endl;
@@ -67,18 +79,23 @@ int main(int argc, char*argv[]){
                 // reset the boolean for next input
                 isTrap = false;
                 std::cout << std::endl;
+            } else if (isBlade){
+                myTest.addBlade(spellDamage);
+                isBlade = false;
+                std::cout << std::endl;
             } else {
                 //std::cout << "Spell damage: " << spellDamage << std::endl;
                 damageOutput = myTest.calculateDamge(spellDamage, false);
                 std::cout << bars << std::endl;
                 std::cout <<  bold << "Damage output: " << damageOutput << unbold << std::endl << std::endl;
 
+                std::cout << bars << std::endl;
+                std::cout << "Calculating damage if we crit..." << std::endl;
                 damageOutput = myTest.calculateDamge(spellDamage, true);
                 std::cout << bars << std::endl;
                 std::cout <<  bold << "Damage output w/Crit: " << damageOutput << unbold << std::endl << std::endl;
 
             }
-            
         } else {
             break;
         }

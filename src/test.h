@@ -12,6 +12,7 @@ public:
     bool readText(const std::string);
     double calculateDamge(int, bool);
     void addTrap(int);
+    void addBlade(int);
     void printWiz();
     bool checkNumber(std::string);
     
@@ -23,8 +24,10 @@ private:
     // stack for our traps
     std::stack<double> st;
     bool trapAdded;
-    // save the stack by pushing into a queue
-    std::stack<double> stSave;
+    
+    // queue for blades
+    std::queue<double> qu;
+    bool bladeAdded;
 };
 
 #endif
