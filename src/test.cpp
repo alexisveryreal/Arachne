@@ -25,13 +25,18 @@ PARAMETER(S): int, int
 RETURN TYPE: void
 POSTCONDITION(S): creates a new wizard
 ---------------------------------------*/
-void test::newWiz(std::string wizardName, int damagePercent, int damageFlat){
+void test::newWiz(std::string wizardName, int damagePercent, int damageFlat, std::string choice){
 
     //std::setprecision(2);
     wizName = wizardName;
     wizPercentage = (double) damagePercent / 100;
     //std::cout << std::setprecision(2) << std::fixed << wizPercentage << std::endl;
     wizFlat = damageFlat;
+    if(choice == "pvp"){
+        toPeeveOrNotToPeeve = true;
+    } else {
+        toPeeveOrNotToPeeve = false;
+    }
 }
 
 /*---------------------------------------
@@ -98,6 +103,7 @@ bool test::readText(const std::string inputFile){
     std::string wizName, damageNumbers;
     std::string theName;
     int damagePercent, damageFlat;
+    std::string pvpOrPve, choice;
 
     inFile.open(inputFile);
     if(inFile.is_open()){
@@ -122,8 +128,14 @@ bool test::readText(const std::string inputFile){
             return false;
         }
 
-
-        newWiz(theName, damagePercent, damageFlat);
+        // get the PVP or PVE choice and make it all lowercase
+        getline(inFile, pvpOrPve, '\n');
+        for(size_t i = 0; i < pvpOrPve.length(); i++){
+            // stores in string to be sent to newWiz
+            choice += tolower(pvpOrPve[i]);
+        }
+        
+        newWiz(theName, damagePercent, damageFlat, choice);
 
         inFile.close();
     }
@@ -134,16 +146,35 @@ bool test::readText(const std::string inputFile){
 FUNCTION NAME: calculateDamage
 PARAMETER(S): int
 RETURN TYPE: int
-POSTCONDITION(S): calculates the total damage output from the spell
+POSTCONDITION(S): calculates the total damage output from the spell.
+
 ---------------------------------------------------------------*/
-double test::calculateDamge(int spellDamage){
-    double totalDamage = 0;
+double test::calculateDamge(int spellDamage, bool showCrit){
+    double totalDamage = 0.0;
+    double critValue = 0.0;
 
     //Multiply by percentage
     totalDamage = (double) spellDamage;
 
-    // damage is additive so its damage + (damage x %school)
-    totalDamage += spellDamage * wizPercentage;
+
+
+    if(showCrit){
+        // if we crit then we do 2x damage in pve and 1.33 in pvp
+        if(toPeeveOrNotToPeeve == false){
+            std::cout << "Applying PVE crit...x2\n"; 
+            critValue = 2.0;
+        } else {
+            std::cout << "Applying PVP crit...x1.33\n";
+            critValue = 1.33;
+        }
+
+        totalDamage *= critValue;
+        totalDamage += totalDamage * wizPercentage;
+    } else {
+        // damage is additive so its damage + (damage x %school)
+        totalDamage += spellDamage * wizPercentage;
+    }
+    
     totalDamage = floor(totalDamage);
 
     //add flat Damage

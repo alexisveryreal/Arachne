@@ -69,9 +69,13 @@ int main(int argc, char*argv[]){
                 std::cout << std::endl;
             } else {
                 //std::cout << "Spell damage: " << spellDamage << std::endl;
-                damageOutput = myTest.calculateDamge(spellDamage);
+                damageOutput = myTest.calculateDamge(spellDamage, false);
                 std::cout << bars << std::endl;
                 std::cout <<  bold << "Damage output: " << damageOutput << unbold << std::endl << std::endl;
+
+                damageOutput = myTest.calculateDamge(spellDamage, true);
+                std::cout << bars << std::endl;
+                std::cout <<  bold << "Damage output w/Crit: " << damageOutput << unbold << std::endl << std::endl;
 
             }
             
