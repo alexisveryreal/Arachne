@@ -19,6 +19,8 @@ test::test(){
     toPeeveOrNotToPeeve = false;
     trapAdded = false;
     bladeAdded = false;
+    resistAdded = false;
+    wizPierce = 0.0;
 }
 /*---------------------------------------
 FUNCTION NAME: newWiz
@@ -26,13 +28,14 @@ PARAMETER(S): int, int
 RETURN TYPE: void
 POSTCONDITION(S): creates a new wizard
 ---------------------------------------*/
-void test::newWiz(std::string wizardName, int damagePercent, int damageFlat, std::string choice){
+void test::newWiz(std::string wizardName, int damagePercent, int damageFlat, std::string choice, int daPierce){
 
     //std::setprecision(2);
     wizName = wizardName;
     wizPercentage = (double) damagePercent / 100;
     //std::cout << std::setprecision(2) << std::fixed << wizPercentage << std::endl;
     wizFlat = damageFlat;
+    wizPierce = (double) daPierce / 100;
     if(choice == "pvp"){
         toPeeveOrNotToPeeve = true;
     } else {
@@ -103,7 +106,7 @@ bool test::readText(const std::string inputFile){
     std::stringstream reader;
     std::string wizName, damageNumbers;
     std::string theName;
-    int damagePercent, damageFlat;
+    int damagePercent, damageFlat, damagePierce;
     std::string pvpOrPve, choice;
 
     inFile.open(inputFile);
@@ -116,7 +119,7 @@ bool test::readText(const std::string inputFile){
         
         // can't have negative damage smh
         if(damagePercent < 0){
-            std::cout << "Error, invalid damage percent." << std::endl;
+            std::cout << "Error, invalid damage percent." << "\n";
             return false;
         }
         
@@ -125,9 +128,19 @@ bool test::readText(const std::string inputFile){
         
         // can't have negative flat damage smh
         if(damageFlat < 0){
-            std::cout << "Error, invalid flat damage." << std::endl;
+            std::cout << "Error, invalid flat damage." << "\n";
             return false;
         }
+
+        // get pierce
+        getline(inFile, damageNumbers, '\n');
+        damagePierce = stoi(damageNumbers);
+
+        if(damagePierce < 0){
+            std::cout << "Error, invalid pierce." << "\n";
+            return false;
+        }
+
 
         // get the PVP or PVE choice and make it all lowercase
         getline(inFile, pvpOrPve, '\n');
@@ -136,7 +149,7 @@ bool test::readText(const std::string inputFile){
             choice += tolower(pvpOrPve[i]);
         }
         
-        newWiz(theName, damagePercent, damageFlat, choice);
+        newWiz(theName, damagePercent, damageFlat, choice, damagePierce);
 
         inFile.close();
     }
@@ -155,6 +168,7 @@ text file.
 double test::calculateDamge(int spellDamage, bool showCrit){
     double totalDamage = 0.0;
     double critValue = 0.0;
+    //bool isShield = false; // if shield, we can check if we need to use pierce
 
     //Multiply by percentage
     totalDamage = (double) spellDamage;
@@ -213,7 +227,18 @@ double test::calculateDamge(int spellDamage, bool showCrit){
             if(trap > 0){
                 std::cout << "^-^ Trap   +";
             } else {
+               // if the wizard has pierce
+                if(wizPierce > 0.0){
+                    std::cout << "*^* Pierce  +";
+                    printPer = wizPierce * 100;
+                    std::cout << printPer << "%" << "\n";
+                }
+                // since shields are negative
+                // we add a positive pierce 
+                trap += wizPierce; 
+
                 std::cout << ":-; Shield ";
+                // isShield = true;
             }
             printPer = trap * 100;
             std::cout << printPer << "%" << "\n";
@@ -224,7 +249,37 @@ double test::calculateDamge(int spellDamage, bool showCrit){
             //std::cout << totalDamage << "\n";
         }
          
+    } 
+
+    // Resist
+    if(resistAdded){
+        std::cout << "\n";
+        double printPer;
+        double theResist = rez.at(0);
+        // resist has to follow pierce as well
+        // we are assuming universal pierce
+        if(wizPierce > 0){
+            std::cout << "*^* Pierce  +";
+            printPer = wizPierce * 100;
+            std::cout << printPer << "%" << "\n";
+
+            // since resist is negative
+            // we add the pierce
+            theResist += wizPierce;
+        }
+        // we have no pierce calculate normally
+        printPer = theResist * 100;
+        std::cout << "`~` Resist  ";
+        std::cout << printPer << "%" << "\n";
+
+        totalDamage += totalDamage * (double)theResist;
+        totalDamage = floor(totalDamage);
     }
+
+    // TODO: Flat Resist
+    
+
+
 
     
 
@@ -279,6 +334,22 @@ void test::addBlade(int myBlade){
     bladeAdded = true;
 }
 /*---------------------------------------------------------------
+FUNCTION NAME: addResist
+PARAMETER(S): int
+RETURN TYPE: void
+POSTCONDITION(S): adds resist to the boss always. 
+---------------------------------------------------------------*/
+void test::addResist(int enemyResist){
+    double resistDecimal = (double) enemyResist / 100;
+
+    rez = {resistDecimal};
+
+    std::cout << "\tAdded enemy " << enemyResist << "% resist" << "\n";
+
+    resistAdded = true;
+}
+
+/*---------------------------------------------------------------
 FUNCTION NAME: printWiz
 PARAMETER(S): 
 RETURN TYPE: void
@@ -297,6 +368,10 @@ void test::printWiz(){
     
     std::cout << " --> Damage Flat: ";
     std::cout << wizFlat << std::endl;
+
+    std::cout << " --> Pierce Percentage: ";
+    actualPercentage = wizPierce * 100;
+    std::cout << actualPercentage << "%" <<  std::endl;
 
     std::cout << std::endl;
 }

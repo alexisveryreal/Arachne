@@ -44,9 +44,10 @@ int main(int argc, char*argv[]){
     //bool isBlade = false;
     bool isTrap = false;
     bool isBlade = false;
+    bool isResist = false;
 
     while(true){
-        std::cout << "Enter a spell damage value, (t# for traps/shields), (b# for blades) OR 'q' to quit: ";
+        std::cout << "Enter a spell damage value, (t# for traps/shields), (b# for blades), (r# for resist[r-50]) OR 'q' to quit: ";
         if(std::cin>> spellVal && spellVal != "q"){
             switch(spellVal[0]){
                 case 't':
@@ -61,6 +62,13 @@ int main(int argc, char*argv[]){
                     isBlade = true;
 
                     // erase the "b"
+                    spellVal.erase(0, 1);
+                    break;
+                case 'r':
+                    // it's a resist value
+                    isResist = true;
+
+                    // erase the "t"
                     spellVal.erase(0, 1);
                     break;
                 default:
@@ -82,6 +90,10 @@ int main(int argc, char*argv[]){
             } else if (isBlade){
                 myTest.addBlade(spellDamage);
                 isBlade = false;
+                std::cout << std::endl;
+            } else if(isResist){
+                myTest.addResist(spellDamage);
+                isResist = false;
                 std::cout << std::endl;
             } else {
                 //std::cout << "Spell damage: " << spellDamage << std::endl;

@@ -1,0 +1,7 @@
+Here is the format of how the text files should be
+
+Wizard Name
+School % damage
+Flat damage 
+pierce (universal)
+pvp/pve (just to calculate if you crit we multiply by 1.33 or 2)
