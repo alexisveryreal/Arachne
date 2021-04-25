@@ -17,6 +17,8 @@ public:
     void addResist(int);
     void printWiz();
     bool checkNumber(std::string);
+    bool checkDouble(std::string);
+    void setCrit(double);
     
 private:
     std::string wizName;
@@ -34,6 +36,10 @@ private:
     // queue for blades
     std::queue<double> qu;
     bool bladeAdded;
+
+    // crit value 
+    double criticalValue;
+    bool critPassed;
 };
 
 #endif

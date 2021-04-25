@@ -40,14 +40,16 @@ int main(int argc, char*argv[]){
 
     std::string spellVal = "";
     int spellDamage = 0;
+    double localCrit = 0.0;
     double damageOutput = 0.0;
     //bool isBlade = false;
     bool isTrap = false;
     bool isBlade = false;
     bool isResist = false;
+    bool suppliedCrit = false;
 
     while(true){
-        std::cout << "Enter a spell damage value, (t# for traps/shields), (b# for blades), (r# for resist[r-50]) OR 'q' to quit: ";
+        std::cout << "Enter a spell damage value, (t# for traps/shields), (b# for blades), (r# for resist[r-50]), (c# for crit multiplier on enemy) OR 'q' to quit: ";
         if(std::cin>> spellVal && spellVal != "q"){
             switch(spellVal[0]){
                 case 't':
@@ -71,17 +73,40 @@ int main(int argc, char*argv[]){
                     // erase the "t"
                     spellVal.erase(0, 1);
                     break;
+                case 'c':
+                    //we got supplied a crit value
+                    suppliedCrit = true;
+
+                    // erase the 'c'
+                    spellVal.erase(0,1);
                 default:
                     break;
             }
-            // check to make sure the rest of the string is purely digits
-            if(!myTest.checkNumber(spellVal)){
-                std::cout << "\t Error! Please only enter integers for spell values" << std::endl;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                continue;
+
+
+            if(suppliedCrit){
+                if(!myTest.checkDouble(spellVal)){
+                    std::cout << "\t Error! Please only enter doubles for critical values" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    continue;
+                }
+            } else {
+                if(!myTest.checkNumber(spellVal)){
+                    std::cout << "\t Error! Please only enter integers for spell values" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    continue;
+                }
             }
-            spellDamage = stoi(spellVal);
+            // check to make sure the rest of the string is purely digits
+            
+            if(suppliedCrit){
+                localCrit = stod(spellVal);
+            } else {
+                spellDamage = stoi(spellVal);
+            }
+            
             if(isTrap){
                 myTest.addTrap(spellDamage);
                 // reset the boolean for next input
@@ -95,6 +120,11 @@ int main(int argc, char*argv[]){
                 myTest.addResist(spellDamage);
                 isResist = false;
                 std::cout << std::endl;
+            } else if(suppliedCrit){
+                myTest.setCrit(localCrit);
+                suppliedCrit = false;
+                std::cout << std::endl;
+
             } else {
                 //std::cout << "Spell damage: " << spellDamage << std::endl;
                 damageOutput = myTest.calculateDamge(spellDamage, false);
